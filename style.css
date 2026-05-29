@@ -1,138 +1,51 @@
 body {
-  margin: 0;
-  font-family: Arial;
   background: #fff5fa;
-  color: #2b2b2b;
 }
 
-/* NAV */
-.topnav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* TITLE */
+.title {
+  color: #ff2f92;
+  font-size: 2.5rem;
+}
 
-  padding: 16px 30px;
-
-  background: linear-gradient(135deg,#ff4fa3,#ff8ccf);
-
+/* PINK BUTTON */
+.btn-pink {
+  background: #ff4fa3;
   color: white;
-
-  position: sticky;
-  top: 0;
-
-  z-index: 1000;
-
-  box-shadow: 0 8px 20px rgba(255,79,163,0.25);
-}
-
-.logo {
-  font-size: 22px;
   font-weight: bold;
 }
 
-.links {
-  display: flex;
-  gap: 18px;
-}
-
-.links a {
-  color: white;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.links a:hover {
-  opacity: 0.7;
-}
-
-/* CONTAINER */
-.container {
-  padding: 25px;
-  max-width: 1100px;
-  margin: auto;
-}
-
-section {
-  margin-bottom: 50px;
-}
-
-/* HERO */
-.hero {
-  text-align: center;
-}
-
-.subtitle {
-  color: #777;
-  margin-top: -10px;
+.btn-pink:hover {
+  background: #ff2f92;
 }
 
 /* CARDS */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-  gap: 18px;
-  margin-top: 20px;
-}
-
 .card {
-  background: white;
-  padding: 18px;
-  border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(255,79,163,0.12);
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-.card h3 {
-  color: #ff4fa3;
-}
-
-.card p {
-  font-size: 22px;
-  font-weight: bold;
-}
-
-/* INPUT */
-input, select {
-  padding: 12px;
-  margin: 6px;
-  border-radius: 12px;
-  border: 2px solid #ffd1e6;
-}
-
-/* BUTTON */
-button {
-  padding: 12px 16px;
-  background: linear-gradient(135deg,#ff4fa3,#ff8ccf);
   border: none;
-  color: white;
-  border-radius: 12px;
-  cursor: pointer;
+  border-radius: 16px;
 }
 
 /* PROGRESS */
-.progress {
-  height: 18px;
-  background: #ffe3f0;
-  border-radius: 20px;
-  overflow: hidden;
-  margin-top: 10px;
+.bg-pink {
+  background: linear-gradient(135deg,#ff4fa3,#ff8ccf) !important;
 }
 
-#progressBar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(135deg,#ff4fa3,#ff8ccf);
-}
-
-/* CHARTS */
+/* CHART FIX */
 canvas {
-  background: white;
-  padding: 15px;
-  border-radius: 18px;
   margin-top: 15px;
-  box-shadow: 0 10px 25px rgba(255,79,163,0.1);
+  width: 100% !important;
+  max-height: 250px;
+}
+
+/* MOBILE FIX */
+@media (max-width: 768px) {
+
+  .title {
+    font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1.4rem;
+  }
+
 }
