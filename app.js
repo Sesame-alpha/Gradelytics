@@ -6,24 +6,32 @@ function save() {
   localStorage.setItem("grades", JSON.stringify(data));
 }
 
-function getZone(m) {
-  if (m >= 85) return "super";
-  if (m >= 75) return "good";
-  if (m >= 70) return "pass";
-  return "danger";
+/* prevent duplicate module per year + semester */
+function isDuplicate(item) {
+  return data.some(d =>
+    d.module.toLowerCase() === item.module.toLowerCase() &&
+    d.year === item.year &&
+    d.semester === item.semester
+  );
 }
 
 function addGrade() {
 
-  const module = document.getElementById("module").value;
+  const module = document.getElementById("module").value.trim();
   const marks = Number(document.getElementById("marks").value);
   const year = Number(document.getElementById("year").value);
   const semester = Number(document.getElementById("semester").value);
 
   if (!module || isNaN(marks)) return;
 
-  data.push({ module, marks, year, semester });
+  const newItem = { module, marks, year, semester };
 
+  if (isDuplicate(newItem)) {
+    alert("This module already exists for this semester/year!");
+    return;
+  }
+
+  data.push(newItem);
   save();
   update();
 }
@@ -32,31 +40,29 @@ function calculate() {
 
   if (data.length === 0) return;
 
-  const valid = data.filter(d => d.marks !== null);
-
-  const avg = valid.reduce((a,b)=>a+b.marks,0)/valid.length;
+  const avg = data.reduce((a,b)=>a+b.marks,0)/data.length;
 
   document.getElementById("avg").innerText = avg.toFixed(2);
 
-  const best = valid.reduce((a,b)=>a.marks>b.marks?a:b);
-  const worst = valid.reduce((a,b)=>a.marks<b.marks?a:b);
+  const best = data.reduce((a,b)=>a.marks>b.marks?a:b);
+  const lowest = data.reduce((a,b)=>a.marks<b.marks?a:b);
 
   document.getElementById("best").innerText = best.module;
-  document.getElementById("worst").innerText = worst.module;
+  document.getElementById("avgModule").innerText = lowest.module;
 
-  // GOAL PROGRESS
+  // GOAL
   let progress = (avg / 80) * 100;
   document.getElementById("progressBar").style.width = progress + "%";
 
-  // AI INSIGHTS
-  let weak = valid.filter(d => d.marks < 70).length;
+  // INSIGHTS
+  let weak = data.filter(d => d.marks < 70).length;
 
   document.getElementById("insightText").innerText =
-    `Weak modules: ${weak}. Focus improvement needed.`;
+    `Weak modules: ${weak}. Improve consistency for better results.`;
 
   // SEMESTER COMPARISON
-  let sem1 = valid.filter(d => d.semester == 1);
-  let sem2 = valid.filter(d => d.semester == 2);
+  let sem1 = data.filter(d => d.semester == 1);
+  let sem2 = data.filter(d => d.semester == 2);
 
   let avg1 = sem1.length ? sem1.reduce((a,b)=>a+b.marks,0)/sem1.length : 0;
   let avg2 = sem2.length ? sem2.reduce((a,b)=>a+b.marks,0)/sem2.length : 0;
@@ -67,23 +73,20 @@ function calculate() {
   // ACHIEVEMENTS
   let ach = [];
 
-  if (valid.filter(d=>d.marks>=85).length >= 1)
+  if (data.filter(d=>d.marks>=85).length >= 1)
     ach.push("🏆 High Performer");
 
-  if (valid.filter(d=>d.marks<70).length === 0)
+  if (data.filter(d=>d.marks<70).length === 0)
     ach.push("🌸 No Danger Modules");
 
   document.getElementById("achievementsBox").innerHTML =
     ach.map(a=>`<div class="card">${a}</div>`).join("");
-
 }
 
 function charts() {
 
-  const valid = data.filter(d=>d.marks!==null);
-
-  const labels = valid.map(d=>d.module);
-  const marks = valid.map(d=>d.marks);
+  const labels = data.map(d=>d.module);
+  const marks = data.map(d=>d.marks);
 
   if (lineChart) lineChart.destroy();
   if (barChart) barChart.destroy();
@@ -91,18 +94,34 @@ function charts() {
 
   lineChart = new Chart(document.getElementById("lineChart"), {
     type: "line",
-    data: { labels, datasets: [{ data: marks, borderColor: "#ff4fa3" }] }
+    data: {
+      labels,
+      datasets: [{
+        data: marks,
+        borderColor: "#ff4fa3",
+        fill: false
+      }]
+    }
   });
 
   barChart = new Chart(document.getElementById("barChart"), {
     type: "bar",
-    data: { labels, datasets: [{ data: marks, backgroundColor: "#ff85c2" }] }
+    data: {
+      labels,
+      datasets: [{
+        data: marks,
+        backgroundColor: "#ff8ccf"
+      }]
+    }
   });
 
   let zones = {super:0,good:0,pass:0,danger:0};
 
-  valid.forEach(d=>{
-    zones[getZone(d.marks)]++;
+  data.forEach(d=>{
+    if(d.marks>=85) zones.super++;
+    else if(d.marks>=75) zones.good++;
+    else if(d.marks>=70) zones.pass++;
+    else zones.danger++;
   });
 
   pieChart = new Chart(document.getElementById("pieChart"), {
@@ -112,7 +131,6 @@ function charts() {
       datasets:[{ data:Object.values(zones) }]
     }
   });
-
 }
 
 function update() {
