@@ -20,7 +20,7 @@
 
   <!-- TITLE -->
   <div class="text-center mb-4">
-    <h1 class="fw-bold title">🌸 Pink Grades 🌸</h1>
+    <h1 class="title">🌸 Pink Grades 🌸</h1>
     <p class="text-muted">Simple Academic Performance Tracker</p>
   </div>
 
@@ -28,21 +28,21 @@
   <div class="row g-3 mb-4">
 
     <div class="col-12 col-md-4">
-      <div class="card p-3 text-center shadow-sm">
+      <div class="card p-3 text-center">
         <h5>Average</h5>
         <h3 id="avg">0</h3>
       </div>
     </div>
 
     <div class="col-12 col-md-4">
-      <div class="card p-3 text-center shadow-sm">
+      <div class="card p-3 text-center">
         <h5>Best Module</h5>
         <h3 id="best">-</h3>
       </div>
     </div>
 
     <div class="col-12 col-md-4">
-      <div class="card p-3 text-center shadow-sm">
+      <div class="card p-3 text-center">
         <h5>Lowest Module</h5>
         <h3 id="avgModule">-</h3>
       </div>
@@ -51,34 +51,18 @@
   </div>
 
   <!-- INPUT -->
-  <div class="card p-3 mb-4 shadow-sm">
+  <div class="card p-3 mb-4">
 
     <h5 class="mb-3">Add Grade</h5>
 
     <div class="row g-2">
 
-      <div class="col-12 col-md-3">
-        <input id="module" class="form-control" placeholder="Module">
+      <div class="col-12 col-md-6">
+        <input id="module" class="form-control" placeholder="Module name">
       </div>
 
-      <div class="col-12 col-md-3">
+      <div class="col-12 col-md-6">
         <input id="marks" type="number" class="form-control" placeholder="Marks">
-      </div>
-
-      <div class="col-6 col-md-3">
-        <select id="year" class="form-select">
-          <option value="1">Year 1</option>
-          <option value="2">Year 2</option>
-          <option value="3">Year 3</option>
-          <option value="4">Year 4</option>
-        </select>
-      </div>
-
-      <div class="col-6 col-md-3">
-        <select id="semester" class="form-select">
-          <option value="1">Sem 1</option>
-          <option value="2">Sem 2</option>
-        </select>
       </div>
 
     </div>
@@ -90,7 +74,7 @@
   </div>
 
   <!-- CHARTS -->
-  <div class="card p-3 mb-4 shadow-sm">
+  <div class="card p-3 mb-4">
 
     <h5 class="mb-3">Analytics</h5>
 
@@ -101,7 +85,7 @@
   </div>
 
   <!-- INSIGHTS -->
-  <div class="card p-3 mb-4 shadow-sm">
+  <div class="card p-3 mb-4">
 
     <h5>AI Insights</h5>
     <p id="insightText">No data yet</p>
@@ -109,12 +93,12 @@
   </div>
 
   <!-- GOAL -->
-  <div class="card p-3 shadow-sm">
+  <div class="card p-3">
 
     <h5>Goal Progress</h5>
 
-    <div class="progress">
-      <div id="progressBar" class="progress-bar bg-pink"></div>
+    <div class="progress bg-light">
+      <div id="progressBar" class="progress-bar"></div>
     </div>
 
   </div>
