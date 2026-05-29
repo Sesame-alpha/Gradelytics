@@ -11,25 +11,27 @@
 
 <body>
 
-<!-- TOP NAV -->
-<nav class="topnav">
-  <h2>🌸PinkGrades🌸</h2>
+<header class="topnav">
 
-  <div class="links">
+  <div class="logo">🌸PinkGrades🌸</div>
+
+  <nav class="links">
     <a href="#dashboard">Dashboard</a>
     <a href="#goals">Goals</a>
     <a href="#analytics">Analytics</a>
     <a href="#insights">Insights</a>
     <a href="#achievements">Achievements</a>
-  </div>
-</nav>
+  </nav>
+
+</header>
 
 <div class="container">
 
   <!-- DASHBOARD -->
-  <section id="dashboard">
+  <section id="dashboard" class="hero">
 
-    <h1>Welcome back Sesa🎀</h1>
+    <h1>Welcome back Sesa!!🌸</h1>
+    <p class="subtitle">Track your academic progress beautifully</p>
 
     <div class="cards">
 
@@ -44,8 +46,8 @@
       </div>
 
       <div class="card">
-        <h3>Worst Module</h3>
-        <p id="worst">-</p>
+        <h3>Average Module</h3>
+        <p id="avgModule">-</p>
       </div>
 
     </div>
@@ -54,19 +56,22 @@
 
   <!-- GOALS -->
   <section id="goals">
+
     <h2>🎯 Goal Tracker</h2>
-    <p>Target: 80% + </p>
+    <p>Target Average: 80% + </p>
 
     <div class="progress">
       <div id="progressBar"></div>
     </div>
+
   </section>
 
   <!-- INPUT -->
   <section>
+
     <h2>➕ Add Grade</h2>
 
-    <input id="module" placeholder="Module">
+    <input id="module" placeholder="Module (e.g. CT)">
     <input id="marks" type="number" placeholder="Marks">
 
     <select id="year">
@@ -82,10 +87,12 @@
     </select>
 
     <button onclick="addGrade()">Add Grade</button>
+
   </section>
 
   <!-- ANALYTICS -->
   <section id="analytics">
+
     <h2>📊 Analytics</h2>
 
     <canvas id="lineChart"></canvas>
@@ -96,10 +103,12 @@
       <h3>Semester Comparison</h3>
       <p id="comparison">-</p>
     </div>
+
   </section>
 
   <!-- INSIGHTS -->
   <section id="insights">
+
     <h2>🧠 AI Insights</h2>
 
     <div class="card">
@@ -110,8 +119,10 @@
 
   <!-- ACHIEVEMENTS -->
   <section id="achievements">
+
     <h2>🏆 Achievements</h2>
     <div id="achievementsBox"></div>
+
   </section>
 
 </div>
