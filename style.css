@@ -1,82 +1,81 @@
+:root {
+  --pink-dark: #ff0a78;
+  --pink: #ff4fa3;
+  --pink-light: #ff8ccf;
+}
+
 body {
-  background: linear-gradient(135deg, #fff0f7, #ffe3f1);
-  font-family: Arial;
+  background: #ffffff;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-/* TITLE */
+/* ======================
+   TITLE
+====================== */
 .title {
-  color: #ff007f;
+  color: var(--pink-dark);
   font-weight: 900;
-  letter-spacing: 1px;
+  text-align: center;
+  font-size: 28px;
+  margin-top: 20px;
 }
 
-/* CARDS (IMPORTANT FIX) */
-.card {
-  border: none;
-  border-radius: 18px;
-
-  background: white;
-
-  box-shadow:
-    0 10px 25px rgba(255, 0, 127, 0.15),
-    0 2px 8px rgba(0,0,0,0.05);
-
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-6px);
-  box-shadow:
-    0 15px 35px rgba(255, 0, 127, 0.25);
-}
-
-/* HEADINGS */
-h1, h2, h3 {
-  color: #ff007f;
-}
-
-/* BUTTON */
+/* ======================
+   BUTTON
+====================== */
 .btn-pink {
-  background: linear-gradient(135deg, #ff007f, #ff4fa3, #ff85c2);
+  background: linear-gradient(135deg, var(--pink-dark), var(--pink));
   color: white;
   font-weight: bold;
-
-  border: none;
-  border-radius: 14px;
-
-  box-shadow: 0 8px 20px rgba(255, 0, 127, 0.3);
-}
-
-.btn-pink:hover {
-  transform: scale(1.03);
-  box-shadow: 0 12px 28px rgba(255, 0, 127, 0.4);
-}
-
-/* PROGRESS BAR */
-.progress {
-  height: 18px;
-  background: #ffd1e6;
-  border-radius: 30px;
-  overflow: hidden;
-}
-
-#progressBar {
-  background: linear-gradient(90deg, #ff007f, #ff4fa3, #ff85c2);
-}
-
-/* INPUTS */
-input, select {
-  border: 2px solid #ffb6d9;
   border-radius: 12px;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
 }
 
-input:focus, select:focus {
-  border-color: #ff007f;
-  box-shadow: 0 0 10px rgba(255,0,127,0.2);
-}
-
-/* CHARTS */
-canvas {
+/* ======================
+   CARDS
+====================== */
+.card {
   border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(255, 0, 127, 0.12);
+  box-shadow: 0 10px 25px rgba(255, 10, 120, 0.15);
+  padding: 15px;
+  background: white;
+  margin: 10px;
+}
+
+/* ======================
+   PROGRESS BAR
+====================== */
+#progressBar {
+  height: 10px;
+  border-radius: 20px;
+  background: linear-gradient(
+    90deg,
+    var(--pink-dark),
+    var(--pink),
+    var(--pink-light)
+  );
+}
+
+/* ======================
+   CHART FIX
+====================== */
+canvas {
+  border-radius: 16px;
+  background: white;
+  max-width: 100%;
+}
+
+/* ======================
+   LAYOUT SAFETY FIX
+====================== */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
 }
