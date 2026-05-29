@@ -1,113 +1,108 @@
-let data = JSON.parse(localStorage.getItem("grades"));
+// ==============================
+// LOAD DATA (FROM LOCALSTORAGE)
+// ==============================
+let data = JSON.parse(localStorage.getItem("grades")) || [];
 
-/* FIX: prevent broken/duplicate seed */
-if (!data || data.length === 0) {
-  data = [
-    { module: "BPA", marks: 76, year: 1, semester: 1 },
-    { module: "CT", marks: 86, year: 1, semester: 1 },
-    { module: "CMS", marks: 73, year: 1, semester: 1 },
-    { module: "CSS", marks: 68, year: 1, semester: 1 }
-  ];
-}
+// ==============================
+// SAVE GRADE (FIXED: NO DUPLICATES / CT FIX)
+// ==============================
+function saveGrade(module, marks) {
+  let current = JSON.parse(localStorage.getItem("grades")) || [];
 
-let lineChart, barChart, pieChart;
+  // prevent duplicate modules (CT spam fix)
+  const map = new Map();
 
-function save() {
-  localStorage.setItem("grades", JSON.stringify(data));
-}
-
-/* STOP DUPLICATES */
-function isDuplicate(item) {
-  return data.some(d =>
-    d.module.toLowerCase() === item.module.toLowerCase() &&
-    d.year === item.year &&
-    d.semester === item.semester
-  );
-}
-
-function addGrade() {
-
-  const module = document.getElementById("module").value.trim();
-  const marks = Number(document.getElementById("marks").value);
-  const year = Number(document.getElementById("year").value);
-  const semester = Number(document.getElementById("semester").value);
-
-  if (!module || isNaN(marks)) return;
-
-  const newItem = { module, marks, year, semester };
-
-  if (isDuplicate(newItem)) {
-    alert("Module already exists in this semester!");
-    return;
-  }
-
-  data.push(newItem);
-  save();
-  update();
-}
-
-function calculate() {
-
-  const avg = data.reduce((a,b)=>a+b.marks,0)/data.length;
-
-  document.getElementById("avg").innerText = avg.toFixed(2);
-
-  const best = data.reduce((a,b)=>a.marks>b.marks?a:b);
-  const lowest = data.reduce((a,b)=>a.marks<b.marks?a:b);
-
-  document.getElementById("best").innerText = best.module;
-  document.getElementById("avgModule").innerText = lowest.module;
-
-  let progress = (avg / 80) * 100;
-  document.getElementById("progressBar").style.width = progress + "%";
-
-  let weak = data.filter(d => d.marks < 70).length;
-
-  document.getElementById("insightText").innerText =
-    `Weak modules: ${weak}. Focus improvement needed.`;
-
-}
-
-function charts() {
-
-  const labels = data.map(d=>d.module);
-  const marks = data.map(d=>d.marks);
-
-  if (lineChart) lineChart.destroy();
-  if (barChart) barChart.destroy();
-  if (pieChart) pieChart.destroy();
-
-  lineChart = new Chart(document.getElementById("lineChart"), {
-    type: "line",
-    data: { labels, datasets: [{ data: marks, borderColor: "#ff4fa3" }] }
+  current.forEach(d => {
+    map.set(d.module.toUpperCase().trim(), d);
   });
 
-  barChart = new Chart(document.getElementById("barChart"), {
-    type: "bar",
-    data: { labels, datasets: [{ data: marks, backgroundColor: "#ff8ccf" }] }
+  map.set(module.toUpperCase().trim(), {
+    module: module.trim(),
+    marks: Number(marks)
   });
 
-  let zones = {super:0,good:0,pass:0,danger:0};
+  const updated = [...map.values()];
 
-  data.forEach(d=>{
-    if(d.marks>=85) zones.super++;
-    else if(d.marks>=75) zones.good++;
-    else if(d.marks>=70) zones.pass++;
+  localStorage.setItem("grades", JSON.stringify(updated));
+  data = updated;
+
+  renderAll(); // refresh UI after save
+}
+
+// ==============================
+// GROUP DATA (AVERAGE PER MODULE)
+// ==============================
+function groupData() {
+  const grouped = {};
+
+  data.forEach(d => {
+    const key = d.module.toUpperCase().trim();
+
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(d.marks);
+  });
+
+  const labels = Object.keys(grouped);
+
+  const marks = labels.map(m => {
+    const arr = grouped[m];
+    return arr.length
+      ? arr.reduce((a, b) => a + b, 0) / arr.length
+      : 0;
+  });
+
+  return { labels, marks };
+}
+
+// ==============================
+// PIE CHART ZONES
+// ==============================
+function getZones() {
+  let zones = { super: 0, good: 0, pass: 0, danger: 0 };
+
+  data.forEach(d => {
+    if (d.marks >= 85) zones.super++;
+    else if (d.marks >= 75) zones.good++;
+    else if (d.marks >= 70) zones.pass++;
     else zones.danger++;
   });
 
-  pieChart = new Chart(document.getElementById("pieChart"), {
-    type: "pie",
+  return zones;
+}
+
+// ==============================
+// RENDER BAR CHART
+// ==============================
+function renderChart() {
+  const { labels, marks } = groupData();
+
+  const ctx = document.getElementById("chart");
+
+  if (!ctx) return;
+
+  new Chart(ctx, {
+    type: "bar",
     data: {
-      labels:["Super","Good","Pass","Danger"],
-      datasets:[{ data:Object.values(zones) }]
+      labels: labels,
+      datasets: [{
+        label: "Module Average",
+        data: marks,
+        borderWidth: 1
+      }]
     }
   });
 }
 
-function update() {
-  calculate();
-  charts();
+// ==============================
+// MAIN RENDER FUNCTION
+// ==============================
+function renderAll() {
+  renderChart();
+  // If you have pie chart, call it here:
+  // renderPieChart(getZones());
 }
 
-update();
+// ==============================
+// INITIAL LOAD
+// ==============================
+renderAll();
