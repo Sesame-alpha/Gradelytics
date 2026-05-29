@@ -42,12 +42,29 @@ function addGrade() {
 }
 
 // ==============================
-// GROUP DATA (FOR CHARTS)
+// FILTER DATA (YEAR + SEMESTER)
+// ==============================
+function getFilteredData() {
+  const year = document.getElementById("filterYear")?.value || "all";
+  const semester = document.getElementById("filterSemester")?.value || "all";
+
+  return data.filter(d => {
+    const yearMatch = year === "all" || String(d.year) === year;
+    const semMatch = semester === "all" || String(d.semester) === semester;
+
+    return yearMatch && semMatch;
+  });
+}
+
+// ==============================
+// GROUP DATA FOR CHARTS
 // ==============================
 function groupData() {
+  const filtered = getFilteredData();
+
   const grouped = {};
 
-  data.forEach(d => {
+  filtered.forEach(d => {
     const key = d.module;
 
     if (!grouped[key]) grouped[key] = [];
@@ -68,9 +85,11 @@ function groupData() {
 // ZONES (PIE CHART)
 // ==============================
 function getZones() {
+  const filtered = getFilteredData();
+
   let zones = { super: 0, good: 0, pass: 0, danger: 0 };
 
-  data.forEach(d => {
+  filtered.forEach(d => {
     const mark = Number(d.marks);
 
     if (mark >= 85) zones.super++;
@@ -86,13 +105,15 @@ function getZones() {
 // GOAL TRACKER
 // ==============================
 function updateGoal() {
-  if (data.length === 0) {
+  const filtered = getFilteredData();
+
+  if (filtered.length === 0) {
     document.getElementById("progressBar").style.width = "0%";
     return;
   }
 
   const avg =
-    data.reduce((sum, d) => sum + Number(d.marks), 0) / data.length;
+    filtered.reduce((sum, d) => sum + Number(d.marks), 0) / filtered.length;
 
   const target = 70;
 
@@ -105,15 +126,17 @@ function updateGoal() {
 // STATS
 // ==============================
 function updateStats() {
-  if (data.length === 0) return;
+  const filtered = getFilteredData();
+
+  if (filtered.length === 0) return;
 
   const avg =
-    data.reduce((sum, d) => sum + Number(d.marks), 0) / data.length;
+    filtered.reduce((sum, d) => sum + Number(d.marks), 0) / filtered.length;
 
   document.getElementById("avg").innerText = avg.toFixed(1);
 
-  const best = [...data].sort((a, b) => b.marks - a.marks)[0];
-  const worst = [...data].sort((a, b) => a.marks - b.marks)[0];
+  const best = [...filtered].sort((a, b) => b.marks - a.marks)[0];
+  const worst = [...filtered].sort((a, b) => a.marks - b.marks)[0];
 
   document.getElementById("best").innerText = best.module;
   document.getElementById("avgModule").innerText = worst.module;
@@ -181,6 +204,12 @@ function renderAll() {
   updateGoal();
   updateStats();
 }
+
+// ==============================
+// FILTER EVENT LISTENERS
+// ==============================
+document.getElementById("filterYear")?.addEventListener("change", renderAll);
+document.getElementById("filterSemester")?.addEventListener("change", renderAll);
 
 // ==============================
 // INIT
